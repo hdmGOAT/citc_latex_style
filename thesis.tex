@@ -1,0 +1,111 @@
+% ---------------------------------------------------------------------------
+% CITC thesis / capstone template.
+% Build:  latexmk -pdf thesis.tex        (biber runs automatically)
+% ---------------------------------------------------------------------------
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage[colorlinks=true,allcolors=black]{hyperref}
+\usepackage{citc}          % all CITC formatting; load after hyperref
+\usepackage{cleveref}      % optional; citc.sty teaches it "Chapter"/"Section"
+
+\title{Your Thesis Title}
+\author{Author One \and Author Two}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ===========================================================================
+% A \section is a CHAPTER: it starts a new page and prints as
+%     Chapter I
+%     INTRODUCTION
+% centered, bold, uppercase. Use the preferred titles from Section 4.3.1:
+% INTRODUCTION, REVIEW OF LITERATURE, METHODOLOGY, RESULTS AND DISCUSSION,
+% SUMMARY AND CONCLUSION, RECOMMENDATIONS.
+% ===========================================================================
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Background of the Study}          % major subsection  -> 1.1.
+\label{sec:background}
+
+Each paragraph is indented 1.25\,cm, justified and single-spaced. The first
+paragraph after a heading is indented too.
+
+\subsubsection{A Minor Subsection}            % minor subsection  -> 1.1.1.
+
+\phead{A paragraph heading} It is indented, bold and italicized, in sentence
+case, followed by a period, and the paragraph runs on from it.
+
+\subsection{Statement of the Problem}
+\subsection{Objectives of the Study}
+\subsection{Scope and Limitations of the Study}
+
+% ===========================================================================
+\section{Review of Literature}
+\label{sec:rrl}
+
+Cite in APA~7 through \textsf{biblatex}: parenthetically with
+\verb|\parencite| \parencite{daganzo1994}, or narratively with
+\verb|\textcite|, as \textcite{daganzo1994} does. In a table column that
+already names the author, use \verb|\workcite{Name}{key}| so the name is not
+printed twice.
+
+% ---------------------------------------------------------- table (Article 5)
+% Title ABOVE, sentence case, left aligned, label "Table X.X.".
+% First-level headings UPPERCASE. Single rules top and bottom, no vertical
+% rules, no side boxes. tabularx keeps a wide column inside the margins.
+\begin{table}[H]
+\centering
+\small
+\caption{A short sentence-case title that names the table.}
+\label{tab:example}
+\begin{tabularx}{\linewidth}{@{}p{3.2cm}X@{}}
+\toprule
+FIRST LEVEL HEADING & FIRST LEVEL HEADING \\
+\midrule
+Row heading 1 & Entry \\
+Row heading 2 & Entry \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% --------------------------------------------------------- figure (Article 6)
+% Caption BELOW, sentence case, left aligned, label "Figure Y.Y.".
+% Keep the caption a NAME; put the description in the text.
+\begin{figure}[htbp]
+\centering
+\rule{6cm}{3cm}                      % replace with \includegraphics
+\caption{A short name for the figure.}
+\label{fig:example}
+\end{figure}
+
+% ===========================================================================
+\section{Methodology}
+\label{sec:method}
+
+% ------------------------------------------------------- equation (Article 7)
+% Numbered <chapter>-<n>, flush right as "(Equation 3-1)", followed by a
+% "where:" list naming every term, with units in parentheses.
+\begin{equation}
+y_i = \min\bigl(D_i,\; S_i,\; C_i\bigr)
+\label{eq:example}
+\end{equation}
+\begin{whereterms}
+$y_i$ & is the flow across boundary $i$ (veh/h) \\
+$D_i$ & is the demand (veh/h) \\
+$S_i$ & is the supply (veh/h) \\
+$C_i$ & is the capacity (veh/h)
+\end{whereterms}
+
+Refer to numbered material as \Cref{eq:example}, \Cref{tab:example},
+\Cref{fig:example}, \Cref{sec:rrl}.
+
+\printbibliography[title={REFERENCES}]
+
+\end{document}

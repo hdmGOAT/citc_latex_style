@@ -1,0 +1,150 @@
+% citc.sty -- CITC (USTP College of Information Technology and Computing)
+% manuscript formatting, per "Formatting and Submission Guidelines for
+% Undergraduate and Graduate Theses and Capstone Projects", 2nd Edition.
+% Article/Section numbers in comments refer to that document.
+%
+% Load AFTER hyperref and BEFORE cleveref (both optional).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{citc}[2026/09/25 CITC manuscript format]
+
+% ---------------------------------------------------------------- 1.3 margins
+% Top/Bottom/Right 2.50 cm, Left 3.80 cm. The header carries the page number
+% (8.2.b: 2.5 cm from the right edge, 1.25 cm from the top edge); headsep is
+% set so the number's top edge lands at 1.25 cm.
+\RequirePackage{geometry}
+\geometry{a4paper,top=2.5cm,bottom=2.5cm,right=2.5cm,left=3.8cm,
+          headheight=14pt,headsep=0.76cm}
+
+% ------------------------------------------------- 1.4 font characteristics
+% Book Antiqua is Monotype's Palatino; mathpazo sets the metric-compatible
+% URW Palladio for text and math. 12 pt comes from the class option.
+\RequirePackage[T1]{fontenc}
+\RequirePackage{mathpazo}
+
+% 1.4: font color black -- overrides the draft's colored links.
+\@ifpackageloaded{hyperref}{\hypersetup{colorlinks=true,allcolors=black}}{}
+
+% ------------------------------------ 4.1.2 indentation, justification, spacing
+% 1.25 cm first-line indent, single spacing, no extra space between paragraphs.
+\RequirePackage{indentfirst}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\linespread{1.0}
+% The CITC text block is narrower than the draft's, so a few justified lines have
+% no good break. Let TeX stretch interword space on those lines instead of running
+% into the margin; this is ordinary justification, not the letter spacing that
+% Section 1.4 forbids.
+\setlength{\emergencystretch}{3em}
+
+% ------------------------------------------------------- 4.2/4.3 text structure
+\RequirePackage{titlesec}
+
+% 4.3.1 main heading: "Chapter <Roman>" over the title, centered, bold,
+% uppercase. 4.3.2: each chapter begins on a new page; 8.2.c: that page's
+% number is imaginary (counted, not printed).
+\titleformat{\section}[display]
+  {\normalfont\bfseries\centering}
+  {Chapter \Roman{section}}
+  {0pt}
+  {\MakeUppercase}
+% 4.2.2: four spaces between the main heading and the first major subsection.
+\titlespacing*{\section}{0pt}{0pt}{4\baselineskip}
+\newcommand{\sectionbreak}{\clearpage\thispagestyle{empty}}
+
+% 4.2.2 major subsection: left, bold, title case, numbered "1.1."
+\titleformat{\subsection}
+  {\normalfont\bfseries}{\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{2\baselineskip}{\baselineskip}
+
+% 4.2.3 minor subsection: left, bold, three spaces below the major subsection.
+\titleformat{\subsubsection}
+  {\normalfont\bfseries}{\thesubsubsection.}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{1.5\baselineskip}{\baselineskip}
+
+% 4.2.4/4.2.5 paragraph heading: indented 1.25 cm, bold italic, sentence case,
+% followed by a period, with the paragraph running on after it. Unnumbered.
+\titleformat{\paragraph}[runin]
+  {\normalfont\bfseries\itshape}{}{0pt}{}[.]
+\titlespacing*{\paragraph}{1.25cm}{1.5\baselineskip}{0.5em}
+\setcounter{secnumdepth}{3}
+
+% --------------------------------------- 5.2/6.1/7.3 chapter-scoped numbering
+% Tables, figures and equations are numbered <chapter>.<n>, each sequence
+% independent of the others, and restart in each chapter.
+\RequirePackage{chngcntr}
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+\counterwithin{equation}{section}
+
+% 7.3.2/7.3.3: equation numbers are <chapter>-<n>, labeled and italicized,
+% enclosed in parentheses, flush right (7.3.4).
+\renewcommand{\theequation}{\thesection-\arabic{equation}}
+\renewcommand\tagform@[1]{\maketag@@@{(\textit{Equation #1})}}
+
+% ------------------------------------------------- 5.2/6.1 captions
+% "Table X.X." above the table, "Figure Y.Y." below the figure; both in
+% sentence case, aligned to the left margin, label followed by a period.
+\RequirePackage{caption}
+\captionsetup{labelsep=period,justification=raggedright,singlelinecheck=false,
+              font=normalsize,labelfont=normalsize}
+\captionsetup[table]{position=above,skip=4pt}
+\captionsetup[figure]{position=below,skip=4pt}
+
+% 7.4.1: references to an equation read "Equation Z-Z", without a second pair
+% of parentheses around the number. cleveref is loaded after this package.
+\AtBeginDocument{\@ifpackageloaded{cleveref}{%
+  \crefformat{equation}{Equation~#2#1#3}%
+  \Crefformat{equation}{Equation~#2#1#3}}{}}
+
+% 4.3.1: main headings are chapters, so cross-references to them read "Chapter N"
+% while the subsections below them stay "Section N.N".
+\AtBeginDocument{\@ifpackageloaded{cleveref}{%
+  \crefname{section}{Chapter}{Chapters}%
+  \Crefname{section}{Chapter}{Chapters}%
+  \crefname{subsection}{Section}{Sections}%
+  \Crefname{subsection}{Section}{Sections}%
+  \crefname{subsubsection}{Section}{Sections}%
+  \Crefname{subsubsection}{Section}{Sections}}{}}
+
+% ----------------------------------------------------------- 8.2 pagination
+% Main body: arabic numerals, upper right corner.
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}}
+
+% ------------------------------------------ 10.1 in-text citation and references
+% APA 7 author-date, via biblatex-apa.
+\RequirePackage[american]{babel}
+\RequirePackage[style=apa,backend=biber]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+% The reference list's DOIs and long uppercase titles cannot hyphenate, and the
+% CITC text block is narrower than the draft's. Let URLs break, and give the
+% bibliography a little stretch, so entries stay inside the right margin.
+\setcounter{biburlnumpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+\setcounter{biburllcpenalty}{9000}
+\appto{\bibsetup}{\emergencystretch=3em\relax}
+\addbibresource{references.bib}
+% Author-named table rows: print the name through the citation, so APA renders
+% "Shi et al. (2021)" instead of "Shi et al. (Shi et al., 2021)".
+\newcommand{\workcite}[2]{\textcite{#2}}
+
+% ------------------------------------------- 4.2.4/4.2.5 paragraph heading
+% Indented by the paragraph indent, bold and italicized, sentence case,
+% followed by a period, with the paragraph running on after it.
+\newcommand{\phead}[1]{\textbf{\emph{#1.}}\hspace{0.6em}\ignorespaces}
+
+% --------------------------------------------- 7.2.2/7.2.3 definition of terms
+% "where:" flush left, single-spaced, one term per row. tabularx so that long
+% definitions wrap instead of running into the margin.
+\RequirePackage{tabularx}
+\newenvironment{whereterms}[1][2.2cm]
+  {\par\smallskip\noindent where:\par\nopagebreak\smallskip
+   \noindent\tabularx{\linewidth}{@{}p{#1}@{\hspace{0.4em}}X@{}}}
+  {\endtabularx\par\smallskip}
+
+\endinput

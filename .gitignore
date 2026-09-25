@@ -1,0 +1,21 @@
+# LaTeX build output
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*-SAVE-ERROR
+
+# Built PDF -- rebuild with `latexmk -pdf thesis.tex`
+thesis.pdf
+
+# OS
+.DS_Store
