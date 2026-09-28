@@ -5,7 +5,7 @@
 %
 % Load AFTER hyperref and BEFORE cleveref (both optional).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{citc}[2026/09/25 CITC manuscript format]
+\ProvidesPackage{citc}[2026/09/28 CITC manuscript format]
 
 % ---------------------------------------------------------------- 1.3 margins
 % Top/Bottom/Right 2.50 cm, Left 3.80 cm. The header carries the page number
@@ -90,6 +90,15 @@
 \captionsetup[table]{position=above,skip=4pt}
 \captionsetup[figure]{position=below,skip=4pt}
 
+% ----------------------------------------------------------- table columns
+% Justified text in a narrow column stretches every line, which opens gaps
+% between words wider than the spaces around them. Set table columns ragged
+% right: P{3cm} for a fixed width, L for one that shares what is left over.
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
 % 7.4.1: references to an equation read "Equation Z-Z", without a second pair
 % of parentheses around the number. cleveref is loaded after this package.
 \AtBeginDocument{\@ifpackageloaded{cleveref}{%
@@ -106,6 +115,38 @@
   \crefname{subsubsection}{Section}{Sections}%
   \Crefname{subsubsection}{Section}{Sections}}{}}
 
+% ------------------------------------- 3.5/3.6 contents lists, 3.1.1.7 equations
+% Section 3.5.5 omits the dots that connect an entry to its page number, and
+% Section 3.5.14 leaves everything but the title in regular weight. tocloft also
+% supplies the list of equations, which LaTeX has no native counterpart for; an
+% equation joins it by calling \eqentry after its \label.
+\RequirePackage{tocloft}
+\renewcommand{\cftsecleader}{\hfill}
+\renewcommand{\cftsubsecleader}{\hfill}
+\renewcommand{\cftsubsubsecleader}{\hfill}
+\renewcommand{\cfttableader}{\hfill}
+\renewcommand{\cftfigleader}{\hfill}
+\renewcommand{\cftsecfont}{\normalfont}
+\renewcommand{\cftsecpagefont}{\normalfont}
+% 3.5.10: each level indented 1.25 cm from the one above.
+% 3.5.9 and Example 3.5.11: a chapter appears in the contents the way it appears
+% in the text -- uppercase, and without the arabic number the subsections use.
+% The number is typeset into a box that is then discarded.
+\renewcommand{\cftsecpresnum}{\begingroup\setbox0\hbox\bgroup}
+\renewcommand{\cftsecaftersnum}{\egroup\endgroup}
+\setlength{\cftsecnumwidth}{0pt}
+\setlength{\cftsecindent}{0cm}
+\setlength{\cftsubsecindent}{1.25cm}
+\setlength{\cftsubsubsecindent}{2.5cm}
+\newlistof{equations}{loe}{LIST OF EQUATIONS}
+\renewcommand{\cftequationsleader}{\hfill}
+\newcommand{\eqentry}[1]{%
+  \addcontentsline{loe}{equations}{\protect\numberline{\theequation}#1}}
+% The page prints its own heading, so discard the one tocloft would add.
+\renewcommand{\cftloetitlefont}{\setbox0\hbox\bgroup}
+\renewcommand{\cftafterloetitle}{\egroup}
+\setlength{\cftbeforeloetitleskip}{0pt}
+
 % ----------------------------------------------------------- 8.2 pagination
 % Main body: arabic numerals, upper right corner.
 \RequirePackage{fancyhdr}
@@ -115,6 +156,10 @@
 \renewcommand{\headrulewidth}{0pt}
 \fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\thepage}%
   \renewcommand{\headrulewidth}{0pt}}
+% 8.1: preliminary pages carry lowercase roman numerals centered at the bottom;
+% frontmatter.tex switches between this and the main-body style.
+\fancypagestyle{prelim}{\fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{\thepage}}
 
 % ------------------------------------------ 10.1 in-text citation and references
 % APA 7 author-date, via biblatex-apa.
@@ -141,10 +186,15 @@
 % --------------------------------------------- 7.2.2/7.2.3 definition of terms
 % "where:" flush left, single-spaced, one term per row. tabularx so that long
 % definitions wrap instead of running into the margin.
-\RequirePackage{tabularx}
 \newenvironment{whereterms}[1][2.2cm]
   {\par\smallskip\noindent where:\par\nopagebreak\smallskip
-   \noindent\tabularx{\linewidth}{@{}p{#1}@{\hspace{0.4em}}X@{}}}
+   \noindent\tabularx{\linewidth}{@{}P{#1}@{\hspace{0.4em}}L@{}}}
   {\endtabularx\par\smallskip}
+
+% ------------------------------------------------------------- placeholders
+% A visible marker for something the guidelines require that is not written
+% yet. Grep for "placeholder{" to list what a draft still owes.
+\newcommand{\placeholder}[2]{%
+  \par\medskip\noindent\textbf{[PLACEHOLDER: #1]}\enspace\emph{#2}\par\medskip}
 
 \endinput

@@ -18,7 +18,11 @@
 \date{}
 
 \begin{document}
-\maketitle
+
+% Article 3's preliminary pages. Fill the fields at the top of frontmatter.tex.
+% Comment this line out and uncomment \maketitle for a draft without them.
+\input{frontmatter}
+%\maketitle
 
 % ===========================================================================
 % A \section is a CHAPTER: it starts a new page and prints as
@@ -28,7 +32,7 @@
 % INTRODUCTION, REVIEW OF LITERATURE, METHODOLOGY, RESULTS AND DISCUSSION,
 % SUMMARY AND CONCLUSION, RECOMMENDATIONS.
 % ===========================================================================
-\section{Introduction}
+\section{INTRODUCTION}
 \label{sec:intro}
 
 \subsection{Background of the Study}          % major subsection  -> 1.1.
@@ -47,7 +51,7 @@ case, followed by a period, and the paragraph runs on from it.
 \subsection{Scope and Limitations of the Study}
 
 % ===========================================================================
-\section{Review of Literature}
+\section{REVIEW OF LITERATURE}
 \label{sec:rrl}
 
 Cite in APA~7 through \textsf{biblatex}: parenthetically with
@@ -65,7 +69,7 @@ printed twice.
 \small
 \caption{A short sentence-case title that names the table.}
 \label{tab:example}
-\begin{tabularx}{\linewidth}{@{}p{3.2cm}X@{}}
+\begin{tabularx}{\linewidth}{@{}P{3.2cm}L@{}}
 \toprule
 FIRST LEVEL HEADING & FIRST LEVEL HEADING \\
 \midrule
@@ -86,7 +90,7 @@ Row heading 2 & Entry \\
 \end{figure}
 
 % ===========================================================================
-\section{Methodology}
+\section{METHODOLOGY}
 \label{sec:method}
 
 % ------------------------------------------------------- equation (Article 7)
@@ -96,6 +100,7 @@ Row heading 2 & Entry \\
 y_i = \min\bigl(D_i,\; S_i,\; C_i\bigr)
 \label{eq:example}
 \end{equation}
+\eqentry{The governing minimum}   % adds it to the LIST OF EQUATIONS
 \begin{whereterms}
 $y_i$ & is the flow across boundary $i$ (veh/h) \\
 $D_i$ & is the demand (veh/h) \\
